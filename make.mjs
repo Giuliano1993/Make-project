@@ -1,5 +1,6 @@
 import 'zx/globals'
 
+
 const file = fs.readFileSync('./.env.yaml','utf8');
 const env = YAML.parse(file)
 //const projectsPath = "C:/Users/giuli/Desktop/Projects";
@@ -38,12 +39,14 @@ switch (projectType) {
         await $`echo "node_modules" > .gitignore`
         break;
     case "Rust":
-        await $`cargo.exe init`
+        const CARGO = os.platform() === 'win32' ? 'cargo.exe' : 'cargo';
+        await $`${CARGO} init`;
         break;
     case "Laravel":
-        await $`php.exe ${composerPath} create-project laravel/laravel .`
+        const PHP = os.platform() === 'win32' ? 'php.exe' : 'php';
+        await $`${PHP} ${composerPath} create-project laravel/laravel .`
         await $`npm install`
-        await $`php.exe artisan key:generate`
+        await $`${PHP} artisan key:generate`
         await $`echo "node_modules \n\r" > .gitignore`
         await $`echo "vendor" > .gitignore`
         //await $`php artisan serve`
